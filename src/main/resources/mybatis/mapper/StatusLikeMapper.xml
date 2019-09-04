@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.petsquare.mapper.StatusLikeMapper">
+
+    <resultMap id="BaseResultMap" type="com.petsquare.dao.StatusLikeDao" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="user_id" property="user_id" jdbcType="VARCHAR" />
+        <result column="status_id" property="status_id" jdbcType="VARCHAR" />
+        <result column="create_at" property="create_at" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+
+    <resultMap id="AppUserResultMap" type="com.petsquare.dao.AppUserDao" >
+        <result column="user_id" property="user_id" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="avatar_url" property="avatar_url" jdbcType="VARCHAR" />
+        <result column="age" property="age" jdbcType="TINYINT" />
+        <result column="gender" property="gender" jdbcType="TINYINT"/>
+        <!--<result column="password" property="password" jdbcType="VARCHAR" />-->
+        <!--<result column="phone" property="phone" jdbcType="VARCHAR" />-->
+        <result column="email" property="email" jdbcType="VARCHAR" />
+        <result column="regist_at" property="regist_at" jdbcType="TIMESTAMP" />
+        <!--<result column="update_at" property="update_at" jdbcType="TIMESTAMP" />-->
+    </resultMap>
+
+    <insert id="addStatusLike" parameterType="com.petsquare.dao.StatusLikeDao">
+        INSERT INTO status_like
+        (user_id, status_id)
+        VALUES
+        (#{user_id}, #{status_id})
+    </insert>
+
+    <delete id="deleteStatusLike" >
+        DELETE FROM status_like
+        WHERE
+        user_id = #{user_id} AND status_id = #{status_id}
+    </delete>
+
+    <select id="getAllStatusLikeByStatusId" resultMap="AppUserResultMap">
+        SELECT
+        app_user.name,
+        app_user.avatar_url,
+        app_user.gender,
+        app_user.user_id,
+        app_user.regist_at,
+        app_user.age,
+        app_user.email
+        FROM
+        status_like
+        LEFT JOIN
+        app_user
+        ON
+        status_like.user_id = app_user.user_id
+        WHERE
+        status_like.status_id = #{statusId}
+        ORDER BY create_at DESC
+    </select>
+
+</mapper>

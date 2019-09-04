@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.petsquare.mapper.StatusMapper">
+
+    <resultMap id="BaseResultMap" type="com.petsquare.dao.StatusDao" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="user_id" property="user_id" jdbcType="VARCHAR" />
+        <result column="content" property="content" jdbcType="VARCHAR" />
+        <result column="img_urls" property="img_urls" jdbcType="VARCHAR" />
+        <result column="lat" property="lat" jdbcType="DOUBLE" />
+        <result column="lon" property="lon" jdbcType="DOUBLE" />
+        <result column="province" property="province" jdbcType="VARCHAR" />
+        <result column="city" property="city" jdbcType="VARCHAR" />
+        <result column="district" property="district" jdbcType="VARCHAR" />
+        <result column="like_num" property="like_num" jdbcType="INTEGER"/>
+        <result column="remark_num" property="remark_num" jdbcType="INTEGER" />
+        <result column="share_num" property="share_num" jdbcType="INTEGER"/>
+        <result column="tags" property="tags" jdbcType="VARCHAR" />
+        <result column="topic" property="topic" jdbcType="VARCHAR" />
+        <result column="create_at" property="create_at" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+
+    <insert id="addStatus" parameterType="com.petsquare.dao.StatusDao">
+        INSERT INTO status
+        (user_id, content, img_urls, lat, lon, province, city, district, tags, topic)
+        VALUES
+        (#{user_id}, #{content}, #{img_urls}, #{lat}, #{lon}, #{province}, #{city}, #{district}, #{tags}, #{topic})
+    </insert>
+
+    <select id="getStatusesByUserId" resultMap="BaseResultMap">
+        SELECT * FROM status WHERE user_id = #{userId} AND is_delete = 0
+        ORDER BY create_at DESC
+        LIMIT #{curIndex}, #{pageSize}
+    </select>
+
+    <select id="getStatusesByLocation" resultMap="BaseResultMap">
+        SELECT
+        status.*,
+        st_distance(POINT(lat, lon), POINT(#{lat}, #{lon}))*11195 AS distance
+        FROM
+        status
+        WHERE
+        is_delete = 0
+        <if test="province != null">
+          AND province LIKE #{province}
+        </if>
+        <if test="city != null">
+            AND city LIKE #{city}
+        </if>
+        ORDER BY
+        distance ASC
+        LIMIT #{curIndex}, #{pageSize}
+    </select>
+
+
+    <select id="getStatusesByUserFollow" resultMap="BaseResultMap">
+        SELECT
+        status.*,
+        app_user_relation.follow_id
+        FROM
+        app_user_relation
+        LEFT JOIN
+        status
+        ON
+        status.user_id=app_user_relation.follow_id
+        WHERE
+        app_user_relation.user_id = #{userId} AND is_delete = 0
+        ORDER BY
+        status.create_at DESC
+        LIMIT #{curIndex}, #{pageSize}
+    </select>
+
+
+    <select id="getStatusById" resultMap="BaseResultMap">
+        SELECT * FROM status WHERE id = #{id} AND is_delete = 0
+    </select>
+
+    <update id="updateStatus" parameterType="com.petsquare.dao.StatusDao">
+        UPDATE status
+        SET
+        like_num = #{like_num},
+        remark_num = #{remark_num},
+        share_num = #{share_num}
+        WHERE
+        id = #{id}
+    </update>
+
+    <update id="deleteStatusById" >
+        UPDATE status
+        SET
+        is_delete = 1
+        WHERE
+        id = #{id}
+    </update>
+
+
+</mapper>

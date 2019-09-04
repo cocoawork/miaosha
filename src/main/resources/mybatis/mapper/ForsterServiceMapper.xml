@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.petsquare.mapper.FosterServiceMapper">
+
+    <resultMap id="BaseResultMap" type="com.petsquare.dao.FosterServiceDao" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="user_id" property="user_id" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="service_desc" property="service_desc" jdbcType="VARCHAR" />
+        <result column="family_desc" property="family_desc" jdbcType="VARCHAR" />
+        <result column="img_urls" property="img_urls" jdbcType="VARCHAR"/>
+        <result column="address" property="address" jdbcType="VARCHAR" />
+        <result column="lat" property="lat" jdbcType="DOUBLE" />
+        <result column="lon" property="lon" jdbcType="DOUBLE" />
+        <result column="province" property="province" jdbcType="VARCHAR" />
+        <result column="city" property="city" jdbcType="VARCHAR" />
+        <result column="district" property="district" jdbcType="VARCHAR" />
+        <result column="max_pet_count" property="max_pet_count" jdbcType="TINYINT" />
+        <result column="house_space" property="house_space" jdbcType="FLOAT" />
+        <result column="house_type" property="house_type" jdbcType="TINYINT" />
+        <result column="walk_place" property="walk_place" jdbcType="VARCHAR" />
+        <result column="walk_duration" property="walk_duration" jdbcType="VARCHAR" />
+        <result column="accept_pet_type" property="accept_pet_type" jdbcType="VARCHAR" />
+        <result column="service_pet_type" property="service_pet_type" jdbcType="VARCHAR" />
+        <result column="foster_type" property="foster_type" jdbcType="TINYINT" />
+        <result column="house_plant" property="house_plant" jdbcType="VARCHAR" />
+        <result column="self_provide" property="self_provide" jdbcType="VARCHAR" />
+        <result column="foster_limit" property="foster_limit" jdbcType="VARCHAR" />
+        <result column="create_at" property="create_at" jdbcType="TIMESTAMP" />
+        <result column="is_open" property="is_open" jdbcType="BOOLEAN" />
+        <association property="user" resultMap="AppUserResultMap"></association>
+    </resultMap>
+
+
+    <resultMap id="AppUserResultMap" type="com.petsquare.dao.AppUserDao" >
+        <result column="user_name" property="name" jdbcType="VARCHAR" />
+        <result column="user_avatar_url" property="avatar_url" jdbcType="VARCHAR" />
+        <result column="user_age" property="age" jdbcType="TINYINT" />
+        <result column="user_gender" property="gender" jdbcType="TINYINT"/>
+        <result column="user_phone" property="phone" jdbcType="VARCHAR" />
+        <result column="user_email" property="email" jdbcType="VARCHAR" />
+        <result column="user_regist_at" property="regist_at" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+
+    <insert id="addFosterService" parameterType="com.petsquare.dao.FosterServiceDao">
+        INSERT INTO foster_service
+        (user_id, name, service_desc,family_desc, img_urls,
+        address, lat, lon, province, city,
+        district, max_pet_count, house_space, house_type, walk_place,
+        walk_duration, accept_pet_type, service_pet_type, foster_type, house_plant,
+        self_provide, foster_limit, is_open)
+        VALUES
+        (#{user_id}, #{name}, #{service_desc}, #{family_desc}, #{img_urls},
+        #{address}, #{lat}, #{lon}, #{province}, #{city},
+        #{district}, #{max_pet_count}, #{house_space}, #{house_type},
+        #{walk_place},#{walk_duration}, #{accept_pet_type}, #{service_pet_type}, #{foster_type}, #{house_plant},
+        #{self_provide}, #{foster_limit}, #{is_open})
+    </insert>
+
+    <select id="getFosterServiceById" resultMap="BaseResultMap">
+        SELECT * FROM foster_service WHERE id = #{id}
+    </select>
+
+
+    <select id="getFosterServiceAndUserById" resultMap="BaseResultMap">
+        SELECT
+        foster_service.*,
+        user.name AS user_name,
+        user.avatar_url AS user_avatar_url,
+        user.age AS user_age,
+        user.gender AS user_gender,
+        user.phone AS user_phone,
+        user.email AS user_email,
+        user.regist_at AS user_regist_at
+        FROM
+        foster_service
+        LEFT JOIN
+        app_user AS user
+        ON
+        user.user_id = foster_service.user_id
+        WHERE
+        foster_service.id = #{id}
+    </select>
+
+    <select id="getFosterServiceAndUserByUserId" resultMap="BaseResultMap">
+        SELECT
+        foster_service.*,
+        user.name AS user_name,
+        user.avatar_url AS user_avatar_url,
+        user.age AS user_age,
+        user.gender AS user_gender,
+        user.phone AS user_phone,
+        user.email AS user_email,
+        user.regist_at AS user_regist_at
+        FROM
+        forster_service
+        LEFT JOIN
+        app_user AS user
+        ON
+        user.user_id = forster_service.user_id
+        WHERE
+        forster_service.user_id = #{userId}
+        LIMIT 1
+    </select>
+
+    <select id="getFosterServicesByLocation" resultMap="BaseResultMap">
+        SELECT
+        forster_service.*,
+        st_distance(POINT(lat, lon), POINT(#{lat}, #{lon}))*11195 AS distance
+        FROM
+        forster_service
+        WHERE
+        is_open = 1 AND state = 1
+        <if test="province != null">
+            AND province LIKE #{province}
+        </if>
+        <if test="city != null">
+            AND province LIKE #{city}
+        </if>
+        ORDER BY
+        distance ASC
+        LIMIT #{curIndex}, #{pageSize}
+    </select>
+
+    <select id="getFosterServicesAndUsersByLocation" resultMap="BaseResultMap">
+        SELECT
+        foster.*,
+        st_distance(POINT(foster.lat, foster.lon), POINT(#{lat}, #{lon}))*11195 AS distance,
+        user.name AS user_name,
+        user.avatar_url AS user_avatar_url,
+        user.age AS user_age,
+        user.gender AS user_gender,
+        user.phone AS user_phone,
+        user.email AS user_email,
+        user.regist_at AS user_regist_at
+        FROM
+        foster_service AS foster
+        LEFT JOIN
+        app_user AS user
+        ON
+        user.user_id = foster.user_id
+        WHERE
+        foster.is_open = 1 AND state = 1
+        <if test="province != null">
+            AND foster.province LIKE #{province}
+        </if>
+        <if test="city != null">
+            AND foster.city LIKE #{city}
+        </if>
+        ORDER BY
+        distance ASC
+        LIMIT #{curIndex}, #{pageSize}
+    </select>
+
+    <delete id="deleteForsterServiceById" >
+        DELETE FROM foster_service WHERE id = #{id}
+    </delete>
+
+    <delete id="deleteForsterServiceByUserId">
+        DELETE FROM foster_service WHERE user_id = #{userId}
+    </delete>
+
+    <update id="updateFosterService" parameterType="com.petsquare.dao.FosterServiceDao">
+        UPDATE foster_service
+        SET
+        service_desc = #{service_desc},
+        family_desc = #{family_desc},
+        address = #{address},
+        max_pet_count = #{max_pet_count},
+        house_space = #{house_space},
+        house_type = #{house_type},
+        walk_place = #{walk_place},
+        walk_duration = #{walk_duration},
+        accept_pet_type = #{accept_pet_type},
+        service_pet_type = #{service_pet_type},
+        foster_type = #{foster_type},
+        house_plant = #{house_plant},
+        self_provide = #{self_provide},
+        foster_limit = #{foster_limit},
+        is_open = #{is_open}
+        WHERE
+        id = #{id} AND user_id = #{user_id}
+    </update>
+
+</mapper>

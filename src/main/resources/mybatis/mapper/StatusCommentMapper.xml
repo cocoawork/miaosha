@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.petsquare.mapper.StatusCommentMapper">
+
+    <resultMap id="BaseResultMap" type="com.petsquare.dao.StatusCommentDao" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="user_id" property="user_id" jdbcType="VARCHAR" />
+        <result column="status_id" property="status_id" jdbcType="VARCHAR" />
+        <result column="comment" property="comment" jdbcType="VARCHAR" />
+        <result column="create_at" property="create_at" jdbcType="TIMESTAMP" />
+        <association property="author" javaType="com.petsquare.dao.AppUserDao" resultMap="AppUserResultMap"></association>
+    </resultMap>
+
+    <resultMap id="AppUserResultMap" type="com.petsquare.dao.AppUserDao" >
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="avatar_url" property="avatar_url" jdbcType="VARCHAR" />
+        <result column="age" property="age" jdbcType="TINYINT" />
+        <result column="gender" property="gender" jdbcType="TINYINT"/>
+        <result column="email" property="email" jdbcType="VARCHAR" />
+        <result column="regist_at" property="regist_at" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+
+    <insert id="addStatusComment" parameterType="com.petsquare.dao.StatusCommentDao">
+        INSERT INTO status_comment
+        (user_id, status_id, comment)
+        VALUES
+        (#{user_id}, #{status_id}, #{comment})
+    </insert>
+
+    <delete id="deleteStatusComment">
+        DELETE FROM status_comment
+        WHERE
+        id = #{id}
+    </delete>
+
+    <select id="getStatusCommentsByStatusId" resultMap="BaseResultMap">
+        SELECT * FROM status_comment
+        WHERE
+        status_id = #{statusId}
+        LIMIT #{curIndex}, #{pageSize}
+    </select>
+
+    <select id="getStatusCommentsAndUsersByStatusId" resultMap="BaseResultMap">
+        SELECT
+        status_comment.*,
+        a.name,
+        a.age ,
+        a.avatar_url,
+        a.email,
+        a.regist_at
+        FROM
+        status_comment
+        LEFT JOIN
+        app_user AS a ON a.user_id = status_comment.user_id
+        WHERE
+        status_id = #{statusId}
+        LIMIT #{curIndex}, #{pageSize}
+    </select>
+
+
+    <select id="getStatusCommentsByUserId" resultMap="BaseResultMap">
+        SELECT * FROM status_comment
+        WHERE
+        user_id = #{userId}
+        LIMIT #{curIndex}, #{pageSize}
+    </select>
+
+
+
+</mapper>

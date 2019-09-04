@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.petsquare.mapper.VerifyCodeMapper">
+
+    <resultMap id="BaseResultMap" type="com.petsquare.dao.VerifyCodeDao" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="phone" property="phone" jdbcType="VARCHAR" />
+        <result column="verify_code" property="verify_code" jdbcType="VARCHAR" />
+        <result column="type" property="type" jdbcType="TINYINT" />
+        <result column="is_used" property="is_used" jdbcType="TINYINT"/>
+        <result column="create_at" property="create_at" jdbcType="TIMESTAMP" />
+        <result column="expire_at" property="expire_at" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <insert id="addVerifyCode" parameterType="com.petsquare.dao.VerifyCodeDao">
+        INSERT into verify_code
+        (phone, verify_code, type, expire_at)
+        VALUES
+        (#{phone}, #{verify_code}, #{type}, #{expire_at})
+    </insert>
+
+
+    <select id="getLastestAvaliableVerifyCode" resultMap="BaseResultMap">
+        SELECT * FROM verify_code
+        WHERE phone = #{phone}
+        AND is_used = 0
+        <if test="create_at != null">
+          ORDER BY create_at DESC
+        </if>
+        LIMIT 1
+    </select>
+
+
+    <update id="updateVerifyCode" parameterType="com.petsquare.dao.VerifyCodeDao">
+        update verify_code
+        SET
+        expire_at = #{expire_at},
+        is_used = #{is_used}
+        WHERE
+        id = #{id}
+    </update>
+
+</mapper>

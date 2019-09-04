@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.petsquare.mapper.AppUserAuthMapper">
+
+    <resultMap id="BaseResultMap" type="com.petsquare.dao.AppUserAuthDao" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="user_id" property="user_id" jdbcType="VARCHAR" />
+        <result column="card_num" property="card_num" jdbcType="VARCHAR" />
+        <result column="real_name" property="real_name" jdbcType="VARCHAR" />
+        <result column="create_at" property="create_at" jdbcType="DATE" />
+        <result column="address" property="address" jdbcType="VARCHAR" />
+        <result column="birthday" property="birthday" jdbcType="VARCHAR" />
+        <result column="card_img_urls" property="card_img_urls" jdbcType="VARCHAR" />
+        <result column="real_avatar_url" property="real_avatar_url" jdbcType="VARCHAR" />
+    </resultMap>
+
+
+    <insert id="addAppUserAuth" parameterType="com.petsquare.dao.AppUserAuthDao">
+        INSERT INTO app_user_auth
+        (user_id, card_num, real_name, address, birthday, card_img_urls, real_avatar_url)
+        VALUES
+        (#{user_id}, #{card_num}, #{real_name}, #{address}, #{birthday}, #{card_img_urls}, #{real_avatar_url})
+    </insert>
+
+    <select id="getAppUserAuthByUserId" resultMap="BaseResultMap">
+        SELECT * FROM app_user_auth
+        WHERE
+        user_id = #{user_id}
+        <if test="create_at != null">
+            ORDER BY create_at DESC
+        </if>
+        LIMIT 1
+    </select>
+
+    <update id="updateAppUserAuth" parameterType="com.petsquare.dao.AppUserAuthDao">
+        UPDATE app_user_auth
+        SET
+        card_num = #{card_num},
+        real_name = #{real_name},
+        address = #{address},
+        birthday = #{birthday},
+        card_img_urls = #{card_img_urls},
+        real_avatar_url = #{real_avatar_url}
+        WHERE
+        user_id = #{user_id}
+    </update>
+
+
+</mapper>

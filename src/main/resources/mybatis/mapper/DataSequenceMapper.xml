@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.petsquare.mapper.DataSequenceMapper">
+
+    <resultMap id="BaseResultMap" type="com.petsquare.dao.DataSequenceDao" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="begin" property="begin" jdbcType="INTEGER" />
+        <result column="current" property="current" jdbcType="INTEGER" />
+        <result column="step" property="step" jdbcType="INTEGER" />
+
+    </resultMap>
+
+
+    <insert id="addSequence" parameterType="com.petsquare.dao.DataSequenceDao">
+        INSERT into data_sequence
+        (name, begin, current, step)
+        VALUES
+        (#{name}, #{begin}, #{current}, #{step})
+    </insert>
+
+
+    <select id="getDataSequenceByName" resultMap="BaseResultMap">
+        SELECT * FROM data_sequence WHERE name=#{name}
+    </select>
+
+
+    <update id="updateDataSequence" parameterType="com.petsquare.dao.DataSequenceDao">
+        UPDATE data_sequence
+        SET
+        step=#{step}, current=#{current}, begin=#{begin}
+        WHERE
+        name=#{name}
+    </update>
+
+</mapper>

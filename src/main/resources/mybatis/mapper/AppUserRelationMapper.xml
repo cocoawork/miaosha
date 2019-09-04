@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.petsquare.mapper.AppUserRelationMapper">
+
+    <resultMap id="BaseResultMap" type="com.petsquare.dao.AppUserRelationDao" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="user_id" property="user_id" jdbcType="VARCHAR" />
+        <result column="follow_id" property="follow_id" jdbcType="VARCHAR" />
+        <result column="create_at" property="create_at" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <resultMap id="AppUserResultMap" type="com.petsquare.dao.AppUserDao" >
+        <result column="user_id" property="user_id" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="avatar_url" property="avatar_url" jdbcType="VARCHAR" />
+        <result column="age" property="age" jdbcType="TINYINT" />
+        <result column="gender" property="gender" jdbcType="TINYINT"/>
+        <!--<result column="password" property="password" jdbcType="VARCHAR" />-->
+        <!--<result column="phone" property="phone" jdbcType="VARCHAR" />-->
+        <result column="email" property="email" jdbcType="VARCHAR" />
+        <result column="regist_at" property="regist_at" jdbcType="TIMESTAMP" />
+        <!--<result column="update_at" property="update_at" jdbcType="TIMESTAMP" />-->
+    </resultMap>
+
+
+    <insert id="addAppUserRelation" parameterType="com.petsquare.dao.AppUserRelationDao">
+        INSERT INTO app_user_relation
+        (user_id, follow_id)
+        VALUES
+        (#{user_id}, #{follow_id})
+    </insert>
+
+
+    <select id="getUserAllFollowByUserId" resultMap="AppUserResultMap">
+        SELECT
+        app_user.name,
+        app_user.avatar_url,
+        app_user.gender,
+        app_user.user_id,
+        app_user.regist_at,
+        app_user.age,
+        app_user.email
+        FROM
+        app_user_relation
+        LEFT JOIN
+        app_user
+        ON
+        app_user_relation.follow_id = app_user.user_id
+        WHERE
+        app_user_relation.user_id = #{userId}
+        LIMIT #{curIndex}, #{pageSize}
+    </select>
+
+    <select id="getUserAllFansByUserId" resultMap="AppUserResultMap">
+        SELECT
+        app_user.name,
+        app_user.avatar_url,
+        app_user.gender,
+        app_user.user_id,
+        app_user.regist_at,
+        app_user.age,
+        app_user.email
+        FROM
+        app_user_relation
+        LEFT JOIN
+        app_user
+        ON
+        app_user_relation.user_id = app_user.user_id
+        WHERE
+        app_user_relation.follow_id = #{userId}
+        LIMIT #{curIndex}, #{pageSize}
+    </select>
+
+    <delete id="deleteAppUserRelation">
+        DELETE FROM app_user_relation
+        WHERE user_id = #{user_id}
+        AND follow_id = #{followId}
+    </delete>
+
+</mapper>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.petsquare.mapper.AppUserMapper">
+
+    <resultMap id="BaseResultMap" type="com.petsquare.dao.AppUserDao" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="user_id" property="user_id" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="avatar_url" property="avatar_url" jdbcType="VARCHAR" />
+        <result column="age" property="age" jdbcType="TINYINT" />
+        <result column="gender" property="gender" jdbcType="TINYINT"/>
+        <result column="password" property="password" jdbcType="VARCHAR" />
+        <result column="phone" property="phone" jdbcType="VARCHAR" />
+        <result column="email" property="email" jdbcType="VARCHAR" />
+        <result column="regist_at" property="regist_at" jdbcType="TIMESTAMP" />
+        <result column="update_at" property="update_at" jdbcType="TIMESTAMP" />
+
+        <association property="auth" javaType="com.petsquare.dao.AppUserAuthDao">
+            <result column="auth_card_num" property="card_num" jdbcType="VARCHAR"></result>
+            <result column="auth_real_name" property="real_name" jdbcType="VARCHAR"></result>
+            <result column="auth_address" property="address" jdbcType="VARCHAR"></result>
+            <result column="auth_card_img_urls" property="card_img_urls" jdbcType="VARCHAR"></result>
+            <result column="auth_real_avatar_url" property="real_avatar_url" jdbcType="VARCHAR"></result>
+            <result column="auth_birthday" property="birthday" jdbcType="DATE"></result>
+            <!--<result column="auth_create_at" property="create_at" jdbcType="TIMESTAMP"></result>-->
+        </association>
+    </resultMap>
+
+
+
+
+<insert id="addAppUser" parameterType="com.petsquare.dao.AppUserDao">
+    INSERT INTO app_user
+    (user_id, name, avatar_url, age, gender, password, phone, email)
+    VALUES
+    (#{user_id}, #{name}, #{avatar_url}, #{age}, #{gender}, #{password}, #{phone}, #{email})
+</insert>
+
+
+    <select id="getAppUserByPhone" resultMap="BaseResultMap">
+        select * FROM app_user WHERE phone=#{phone}
+    </select>
+
+    <select id="getAppUserAndAuthInfoByPhone" resultMap="BaseResultMap">
+        SELECT
+        app_user.*,
+        a.card_num AS auth_card_num,
+        a.real_name AS auth_real_name,
+        a.address AS auth_address,
+        a.card_img_urls AS auth_card_img_urls,
+        a.real_avatar_url AS auth_real_avatar_url,
+        a.birthday AS auth_birthday,
+        a.create_at AS auth_create_at
+        FROM
+        app_user
+        LEFT JOIN
+        app_user_auth AS a ON a.user_id = app_user.user_id
+        WHERE
+        phone=#{phone}
+    </select>
+
+</mapper>
