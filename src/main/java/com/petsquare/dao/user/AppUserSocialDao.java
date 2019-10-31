@@ -1,4 +1,4 @@
-package com.petsquare.dao;
+package com.petsquare.dao.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;

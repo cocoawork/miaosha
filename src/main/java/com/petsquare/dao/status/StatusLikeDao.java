@@ -1,4 +1,4 @@
-package com.petsquare.dao;
+package com.petsquare.dao.status;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -13,20 +13,15 @@ import java.sql.Timestamp;
 
 @Setter
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor
-public class StatusCommentDao {
-
+@AllArgsConstructor
+public class StatusLikeDao {
     @JsonIgnore
     private Integer id;
     @NotBlank
     private String status_id;
     @NotBlank
     private String user_id;
-    @NotBlank
-    private String comment;
     @PastOrPresent
     private Timestamp create_at;
-    private AppUserDao author;
-
 }

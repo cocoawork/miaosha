@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.petsquare.mapper.StatusMapper">
 
-    <resultMap id="BaseResultMap" type="com.petsquare.dao.StatusDao" >
+    <resultMap id="BaseResultMap" type="com.petsquare.dao.status.StatusDao" >
         <id column="id" property="id" jdbcType="BIGINT" />
         <result column="user_id" property="user_id" jdbcType="VARCHAR" />
         <result column="content" property="content" jdbcType="VARCHAR" />
@@ -18,16 +18,25 @@
         <result column="remark_num" property="remark_num" jdbcType="INTEGER" />
         <result column="share_num" property="share_num" jdbcType="INTEGER"/>
         <result column="tags" property="tags" jdbcType="VARCHAR" />
-        <result column="topic" property="topic" jdbcType="VARCHAR" />
         <result column="create_at" property="create_at" jdbcType="TIMESTAMP" />
+        <association property="topic" resultMap="StatusTopicResultMap"></association>
+    </resultMap>
+
+    <resultMap id="StatusTopicResultMap" type="com.petsquare.dao.status.StatusTopicDao">
+        <id column="id" property="id" jdbcType="BIGINT"></id>
+        <result column="topic_id" property="topic_id" jdbcType="TINYINT"></result>
+        <result column="topic_title" property="topic_title" jdbcType="VARCHAR"></result>
+        <result column="topic_desc" property="topic_desc" jdbcType="VARCHAR"></result>
+        <result column="topic_thum_url" property="topic_thum_url" jdbcType="VARCHAR"></result>
+        <result column="create_at" property="create_at" jdbcType="TIMESTAMP"></result>
     </resultMap>
 
 
-    <insert id="addStatus" parameterType="com.petsquare.dao.StatusDao">
+    <insert id="addStatus" parameterType="com.petsquare.dao.status.StatusDao">
         INSERT INTO status
-        (user_id, content, img_urls, lat, lon, province, city, district, tags, topic)
+        (user_id, content, img_urls, lat, lon, province, city, district, tags, topic_id)
         VALUES
-        (#{user_id}, #{content}, #{img_urls}, #{lat}, #{lon}, #{province}, #{city}, #{district}, #{tags}, #{topic})
+        (#{user_id}, #{content}, #{img_urls}, #{lat}, #{lon}, #{province}, #{city}, #{district}, #{tags}, #{topic_id})
     </insert>
 
     <select id="getStatusesByUserId" resultMap="BaseResultMap">
@@ -78,12 +87,13 @@
         SELECT * FROM status WHERE id = #{id} AND is_delete = 0
     </select>
 
-    <update id="updateStatus" parameterType="com.petsquare.dao.StatusDao">
+    <update id="updateStatus" parameterType="com.petsquare.dao.status.StatusDao">
         UPDATE status
         SET
         like_num = #{like_num},
         remark_num = #{remark_num},
         share_num = #{share_num}
+        topic_id = #{topic_id}
         WHERE
         id = #{id}
     </update>

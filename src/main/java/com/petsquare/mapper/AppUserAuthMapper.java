@@ -1,6 +1,6 @@
 package com.petsquare.mapper;
 
-import com.petsquare.dao.AppUserAuthDao;
+import com.petsquare.dao.user.AppUserAuthDao;
 
 public interface AppUserAuthMapper {
 

@@ -1,13 +1,13 @@
 package com.petsquare.mapper;
 
-import com.petsquare.dao.AppUserDao;
+import com.petsquare.dao.user.AppUserDao;
 
 public interface AppUserMapper {
 
     public Integer addAppUser(AppUserDao user);
 
-    public AppUserDao getAppUserByPhone(String phone);
+    public AppUserDao getAppUserInfoByPhone(String phone);
 
-    public AppUserDao getAppUserAndAuthInfoByPhone(String phone);
+    public AppUserDao getAppUserInfoByUserId(String userId);
 
 }

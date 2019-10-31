@@ -4,16 +4,16 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.petsquare.mapper.StatusCommentMapper">
 
-    <resultMap id="BaseResultMap" type="com.petsquare.dao.StatusCommentDao" >
+    <resultMap id="BaseResultMap" type="com.petsquare.dao.status.StatusCommentDao" >
         <id column="id" property="id" jdbcType="BIGINT" />
         <result column="user_id" property="user_id" jdbcType="VARCHAR" />
         <result column="status_id" property="status_id" jdbcType="VARCHAR" />
         <result column="comment" property="comment" jdbcType="VARCHAR" />
         <result column="create_at" property="create_at" jdbcType="TIMESTAMP" />
-        <association property="author" javaType="com.petsquare.dao.AppUserDao" resultMap="AppUserResultMap"></association>
+        <association property="author" javaType="com.petsquare.dao.user.AppUserDao" resultMap="AppUserResultMap"></association>
     </resultMap>
 
-    <resultMap id="AppUserResultMap" type="com.petsquare.dao.AppUserDao" >
+    <resultMap id="AppUserResultMap" type="com.petsquare.dao.user.AppUserDao" >
         <result column="name" property="name" jdbcType="VARCHAR" />
         <result column="avatar_url" property="avatar_url" jdbcType="VARCHAR" />
         <result column="age" property="age" jdbcType="TINYINT" />
@@ -23,7 +23,7 @@
     </resultMap>
 
 
-    <insert id="addStatusComment" parameterType="com.petsquare.dao.StatusCommentDao">
+    <insert id="addStatusComment" parameterType="com.petsquare.dao.status.StatusCommentDao">
         INSERT INTO status_comment
         (user_id, status_id, comment)
         VALUES

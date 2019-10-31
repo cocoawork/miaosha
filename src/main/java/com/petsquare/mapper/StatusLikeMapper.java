@@ -1,7 +1,7 @@
 package com.petsquare.mapper;
 
-import com.petsquare.dao.AppUserDao;
-import com.petsquare.dao.StatusLikeDao;
+import com.petsquare.dao.user.AppUserDao;
+import com.petsquare.dao.status.StatusLikeDao;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

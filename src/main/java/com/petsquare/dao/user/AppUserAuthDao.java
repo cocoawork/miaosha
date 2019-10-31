@@ -1,4 +1,4 @@
-package com.petsquare.dao;
+package com.petsquare.dao.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
@@ -9,6 +9,7 @@ import lombok.Setter;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Past;
 import java.sql.Date;
+import java.sql.Timestamp;
 
 @Setter
 @Getter
@@ -18,6 +19,7 @@ public class AppUserAuthDao {
 
     @JsonIgnore
     private Integer id;
+    @JsonIgnore
     @NotBlank
     private String user_id;
     @NotBlank
@@ -28,7 +30,7 @@ public class AppUserAuthDao {
     @NotBlank
     @Past
     private Date birthday;
-
+    private Timestamp create_at;
     private String real_avatar_url;
     private String card_img_urls;
 

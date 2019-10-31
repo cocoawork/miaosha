@@ -1,6 +1,6 @@
 package com.petsquare.mapper;
 
-import com.petsquare.dao.StatusCommentDao;
+import com.petsquare.dao.status.StatusCommentDao;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

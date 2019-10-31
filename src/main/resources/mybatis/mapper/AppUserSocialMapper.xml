@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.petsquare.mapper.AppUserSocialMapper">
-    <resultMap id="BaseResultMap" type="com.petsquare.dao.AppUserSocialDao" >
+    <resultMap id="BaseResultMap" type="com.petsquare.dao.user.AppUserSocialDao" >
         <id column="id" property="id" jdbcType="BIGINT" />
         <result column="user_id" property="user_id" jdbcType="VARCHAR" />
         <result column="wx_id" property="wx_id" jdbcType="VARCHAR" />
@@ -12,7 +12,7 @@
         <result column="wb_id" property="wb_id" jdbcType="VARCHAR" />
     </resultMap>
 
-    <insert id="addAppUserSocial" parameterType="com.petsquare.dao.AppUserSocialDao">
+    <insert id="addAppUserSocial" parameterType="com.petsquare.dao.user.AppUserSocialDao">
         INSERT INTO
         app_user_social
         (user_id, wx_id, qq_id, zfb_id, wb_id)
@@ -24,7 +24,7 @@
         SELECT * FROM app_user_social WHERE user_id = #{user_id}
     </select>
 
-    <update id="updateAppUserSocial" parameterType="com.petsquare.dao.AppUserSocialDao">
+    <update id="updateAppUserSocial" parameterType="com.petsquare.dao.user.AppUserSocialDao">
         UPDATE app_user_social
         SET
         wx_id = #{wx_id},

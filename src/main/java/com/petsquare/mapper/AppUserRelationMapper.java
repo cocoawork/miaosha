@@ -1,7 +1,7 @@
 package com.petsquare.mapper;
 
-import com.petsquare.dao.AppUserDao;
-import com.petsquare.dao.AppUserRelationDao;
+import com.petsquare.dao.user.AppUserDao;
+import com.petsquare.dao.user.AppUserRelationDao;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -24,4 +24,10 @@ public interface AppUserRelationMapper {
     * 取消用户关注
     * */
     public Integer deleteAppUserRelation(@Param("userId")String userId, @Param("followId")String followId);
+
+
+    public Integer getUserAllFansCountByUserId(String userId);
+
+
+    public Integer getUserAllFollowCountByUserId(String userId);
 }

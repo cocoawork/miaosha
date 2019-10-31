@@ -14,6 +14,8 @@ public enum ExceptionMsg {
     REGIST_SUUCCESS("10020", "注册成功"),
     REGIST_FAIL_USER_EXIST("10021", "用户已存在"),
 
+    FOSTER_SERVICE_EXIST("10050", "用户已经创建服务"),
+
 
     ;
     private String code;

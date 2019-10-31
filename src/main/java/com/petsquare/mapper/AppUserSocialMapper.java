@@ -1,6 +1,6 @@
 package com.petsquare.mapper;
 
-import com.petsquare.dao.AppUserSocialDao;
+import com.petsquare.dao.user.AppUserSocialDao;
 
 public interface AppUserSocialMapper {
 

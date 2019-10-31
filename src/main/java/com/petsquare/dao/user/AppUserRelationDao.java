@@ -1,5 +1,4 @@
-package com.petsquare.dao;
-
+package com.petsquare.dao.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
@@ -13,15 +12,17 @@ import java.sql.Timestamp;
 
 @Setter
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
-public class StatusLikeDao {
+@NoArgsConstructor
+public class AppUserRelationDao {
+
     @JsonIgnore
     private Integer id;
     @NotBlank
-    private String status_id;
+    private String user_id; //用户id
     @NotBlank
-    private String user_id;
+    private String follow_id;//用户关注的用户id
     @PastOrPresent
     private Timestamp create_at;
+
 }

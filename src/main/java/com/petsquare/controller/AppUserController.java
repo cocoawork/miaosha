@@ -1,10 +1,7 @@
 package com.petsquare.controller;
 
-import com.petsquare.dao.AppUserDao;
-import com.petsquare.response.BusinessException;
-import com.petsquare.response.ExceptionMsg;
-import com.petsquare.response.ResponseDataObject;
-import com.petsquare.response.ResponseObject;
+import com.petsquare.dto.AppUserDto;
+import com.petsquare.response.*;
 import com.petsquare.service.AppUserService;
 import com.petsquare.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,21 +33,21 @@ public class AppUserController extends BaseController {
             return new ResponseObject(ExceptionMsg.PARAMETER_ERROR);
         }
 
-        AppUserDao appUserDaoExist = appUserService.getAppUserByPhone(phone);
-        if (appUserDaoExist != null) {
+        AppUserDto AppUserDto = appUserService.getAppUserInfoByPhone(phone);
+        if (AppUserDto != null) {
             return new ResponseObject(ExceptionMsg.REGIST_FAIL_USER_EXIST);
         }
 
-        AppUserDao appUserDao = new AppUserDao();
-        appUserDao.setName(name);
-        appUserDao.setPhone(phone);
-        appUserDao.setPassword(CommonUtil.StringMD5(password));
+        AppUserDto appUserDto1 = new AppUserDto();
+        appUserDto1.setName(name);
+        appUserDto1.setPhone(phone);
+        appUserDto1.setPassword(CommonUtil.StringMD5(password));
 
-        Boolean result = appUserService.addAppUser(appUserDao);
+        Boolean result = appUserService.addAppUser(appUserDto1);
         if (result) {
-            return new ResponseObject();
+            return new ResponseObject(ExceptionMsg.SUCCESS);
         } else {
-            return new ResponseObject(ExceptionMsg.SYSTEM_ERROR);
+            return new ResponseObject(ExceptionMsg.FAILURE);
         }
 
     }
@@ -66,17 +63,17 @@ public class AppUserController extends BaseController {
         if (phone == null || password == null) {
             return new ResponseObject(ExceptionMsg.PARAMETER_ERROR);
         }
-        AppUserDao appUserDao = appUserService.getAppUserByPhone(phone);
-        if (appUserDao == null) {
+        AppUserDto appUserDto = appUserService.getAppUserInfoByPhone(phone);
+        if (appUserDto == null) {
             return new ResponseObject(ExceptionMsg.LOGIN_FAIL);
         }
 
-        String pwd = appUserDao.getPassword();
+        String pwd = appUserDto.getPassword();
         Date date = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
         //比对密码
         if (password.equals(CommonUtil.StringMD5(pwd+dateFormat.format(date)))) {
-            return new ResponseDataObject(appUserDao);
+            return new ResponseDataObject(appUserDto);
         }
         return new ResponseObject(ExceptionMsg.LOGIN_FAIL);
     }
@@ -91,7 +88,7 @@ public class AppUserController extends BaseController {
         if (userId == null) {
             return new ResponseObject(ExceptionMsg.PARAMETER_ERROR);
         }
-        List<AppUserDao> fans = appUserService.getAppUserAllFansByUserId(userId, pageIndex, pageSize);
+        List<AppUserDto> fans = appUserService.getAppUserAllFansByUserId(userId, pageIndex, pageSize);
         return new ResponseDataObject(fans);
     }
 
@@ -104,8 +101,17 @@ public class AppUserController extends BaseController {
         if (userId == null) {
             return new ResponseObject(ExceptionMsg.PARAMETER_ERROR);
         }
-        List<AppUserDao> follows = appUserService.getAppUserAllFollowByUserId(userId, pageIndex, pageSize);
+        List<AppUserDto> follows = appUserService.getAppUserAllFollowByUserId(userId, pageIndex, pageSize);
         return new ResponseDataObject(follows);
+    }
+
+
+    /*
+    * 添加用户实名认证信息
+    * */
+    @RequestMapping(value = "/addAppUserAuth", method = RequestMethod.POST)
+    public Response addAppUserAuth(AppUserDto.AppUserAuthDto appUserAuthDto) {
+        return null;
     }
 
 

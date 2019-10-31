@@ -1,4 +1,4 @@
-package com.petsquare.dao;
+package com.petsquare.dao.status;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
@@ -16,7 +16,7 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 public class StatusDao {
 
-    @JsonIgnore
+
     private String id;
     @NotBlank
     private String user_id;
@@ -31,7 +31,9 @@ public class StatusDao {
     private Integer remark_num;
     private Integer share_num;
     private String tags;
-    private String topic;
+    @JsonIgnore
+    private String topic_id;
+    private StatusTopicDao topic;
     @PastOrPresent
     private Timestamp create_at;
 

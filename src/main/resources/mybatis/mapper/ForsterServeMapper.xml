@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.petsquare.mapper.FosterServiceMapper">
+<mapper namespace="com.petsquare.mapper.FosterServeMapper">
 
-    <resultMap id="BaseResultMap" type="com.petsquare.dao.FosterServiceDao" >
+    <resultMap id="BaseResultMap" type="com.petsquare.dao.FosterServeDao" >
         <id column="id" property="id" jdbcType="BIGINT" />
         <result column="user_id" property="user_id" jdbcType="VARCHAR" />
         <result column="name" property="name" jdbcType="VARCHAR" />
@@ -34,7 +34,7 @@
     </resultMap>
 
 
-    <resultMap id="AppUserResultMap" type="com.petsquare.dao.AppUserDao" >
+    <resultMap id="AppUserResultMap" type="com.petsquare.dao.user.AppUserDao" >
         <result column="user_name" property="name" jdbcType="VARCHAR" />
         <result column="user_avatar_url" property="avatar_url" jdbcType="VARCHAR" />
         <result column="user_age" property="age" jdbcType="TINYINT" />
@@ -45,7 +45,7 @@
     </resultMap>
 
 
-    <insert id="addFosterService" parameterType="com.petsquare.dao.FosterServiceDao">
+    <insert id="addFosterService" parameterType="com.petsquare.dao.FosterServeDao">
         INSERT INTO foster_service
         (user_id, name, service_desc,family_desc, img_urls,
         address, lat, lon, province, city,
@@ -163,7 +163,7 @@
         DELETE FROM foster_service WHERE user_id = #{userId}
     </delete>
 
-    <update id="updateFosterService" parameterType="com.petsquare.dao.FosterServiceDao">
+    <update id="updateFosterService" parameterType="com.petsquare.dao.FosterServeDao">
         UPDATE foster_service
         SET
         service_desc = #{service_desc},
@@ -180,7 +180,8 @@
         house_plant = #{house_plant},
         self_provide = #{self_provide},
         foster_limit = #{foster_limit},
-        is_open = #{is_open}
+        is_open = #{is_open},
+        state = #{state}
         WHERE
         id = #{id} AND user_id = #{user_id}
     </update>

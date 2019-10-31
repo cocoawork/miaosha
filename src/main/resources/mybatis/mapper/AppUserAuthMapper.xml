@@ -5,7 +5,7 @@
 
 <mapper namespace="com.petsquare.mapper.AppUserAuthMapper">
 
-    <resultMap id="BaseResultMap" type="com.petsquare.dao.AppUserAuthDao" >
+    <resultMap id="BaseResultMap" type="com.petsquare.dao.user.AppUserAuthDao" >
         <id column="id" property="id" jdbcType="BIGINT" />
         <result column="user_id" property="user_id" jdbcType="VARCHAR" />
         <result column="card_num" property="card_num" jdbcType="VARCHAR" />
@@ -18,7 +18,7 @@
     </resultMap>
 
 
-    <insert id="addAppUserAuth" parameterType="com.petsquare.dao.AppUserAuthDao">
+    <insert id="addAppUserAuth" parameterType="com.petsquare.dao.user.AppUserAuthDao">
         INSERT INTO app_user_auth
         (user_id, card_num, real_name, address, birthday, card_img_urls, real_avatar_url)
         VALUES
@@ -35,7 +35,7 @@
         LIMIT 1
     </select>
 
-    <update id="updateAppUserAuth" parameterType="com.petsquare.dao.AppUserAuthDao">
+    <update id="updateAppUserAuth" parameterType="com.petsquare.dao.user.AppUserAuthDao">
         UPDATE app_user_auth
         SET
         card_num = #{card_num},

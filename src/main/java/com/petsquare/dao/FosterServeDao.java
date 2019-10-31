@@ -1,7 +1,7 @@
 package com.petsquare.dao;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.petsquare.dao.user.AppUserDao;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,9 +15,9 @@ import java.sql.Timestamp;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class FosterServiceDao {
+public class FosterServeDao {
 
-    @JsonIgnore
+
     private Integer id;
     @NotBlank
     private String user_id;

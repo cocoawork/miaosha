@@ -1,14 +1,15 @@
 package com.petsquare.service.impl;
 
-import com.petsquare.dao.AppUserDao;
-import com.petsquare.dao.StatusCommentDao;
-import com.petsquare.dao.StatusDao;
-import com.petsquare.dao.StatusLikeDao;
+import com.petsquare.dao.user.AppUserDao;
+import com.petsquare.dao.status.StatusCommentDao;
+import com.petsquare.dao.status.StatusDao;
+import com.petsquare.dao.status.StatusLikeDao;
 import com.petsquare.mapper.StatusCommentMapper;
 import com.petsquare.mapper.StatusLikeMapper;
 import com.petsquare.mapper.StatusMapper;
 import com.petsquare.response.BusinessException;
 import com.petsquare.response.ExceptionMsg;
+import com.petsquare.service.AppUserService;
 import com.petsquare.service.BaseService;
 import com.petsquare.service.StatusService;
 import com.petsquare.util.validate.ValiadationResult;
@@ -29,6 +30,9 @@ public class StatusServiceImpl extends BaseService implements StatusService {
     @Autowired
     private StatusCommentMapper statusCommentMapper;
 
+    @Autowired
+    private AppUserService appUserService;
+
 
     @Override
     public Boolean addStatus(StatusDao statusDao) throws BusinessException {
@@ -36,6 +40,12 @@ public class StatusServiceImpl extends BaseService implements StatusService {
         if (valiadationResult.getHasErrors()) {
             throw new BusinessException(ExceptionMsg.PARAMETER_ERROR, valiadationResult.getErrorsString());
         }
+
+        if (appUserService.getAppUserInfoByUserId(statusDao.getUser_id()) == null) {
+            //用户不存在
+            throw new BusinessException(ExceptionMsg.FAILURE, "用户不存在");
+        }
+
         return statusMapper.addStatus(statusDao) != 0;
     }
 

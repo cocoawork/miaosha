@@ -1,10 +1,10 @@
 package com.petsquare.service;
 
 
-import com.petsquare.dao.AppUserDao;
-import com.petsquare.dao.StatusCommentDao;
-import com.petsquare.dao.StatusDao;
-import com.petsquare.dao.StatusLikeDao;
+import com.petsquare.dao.user.AppUserDao;
+import com.petsquare.dao.status.StatusCommentDao;
+import com.petsquare.dao.status.StatusDao;
+import com.petsquare.dao.status.StatusLikeDao;
 import com.petsquare.response.BusinessException;
 
 import java.util.List;
